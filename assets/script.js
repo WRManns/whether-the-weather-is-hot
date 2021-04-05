@@ -5,7 +5,7 @@ var descriptEl = document.querySelector(".weather-description p");
 var locationEl = document.querySelector(".location p");
 
 function displayWeather(){
-//iconEl.innerHTML= `<img src="icons/${weather.iconID}.png"/>`;
+iconEl.innerHTML= `<img src="/assets/icons/weather_icons"/>`;
 tempEl.innerHTML= `${weather.temperature.value} degrees <span>F</span>`;
 descriptEl.innerHTML= `${weather.description}`;
 locationEl.innerHTML= `${weather.city}`;
@@ -33,7 +33,7 @@ function getWeather(){
     .then(function(data) {
         weather.temperature.value = Math.floor(data.main.temp - kelvin);
         weather.description = data.weather[0].description;
-        //weather.iconId = data.weather[0].icon;
+        weather.iconId = data.weather[0].icon;
         weather.city = data.name;
 
     })
