@@ -3,6 +3,7 @@ var iconEl = document.querySelector(".weather-icon");
 var tempEl = document.querySelector(".temp-display p");
 var descriptEl = document.querySelector(".weather-description p");
 var locationEl = document.querySelector(".location p");
+var savedCity= [];
 
 
 function displayCurrentWeather(){
@@ -20,7 +21,7 @@ weather.temperature = {
 }
 
 function getCurrentWeather(){
-    var cityEl = JSON.parse(localStorage.getItem("inputCity"));
+    var cityEl = JSON.parse(localStorage.getItem("newCity"));
     var apiOpenWeather= `https://api.openweathermap.org/data/2.5/weather?q=${cityEl},us&appid=${apiKey}`
     fetch(apiOpenWeather).then(function(response){
         var data = response.json();
@@ -39,12 +40,17 @@ function getCurrentWeather(){
 }
 
 function displayFutureWeather(){
-    
+
 }
 
 function saveSearch(){
-    var cityCodeEl = document.getElementById("inputCity");
-    localStorage.setItem("inputCity", JSON.stringify(cityCodeEl.value));
+    var newCity = document.getElementById("inputCity");
+    
+    localStorage.setItem("newCity", JSON.stringify(newCity.value));
+    var savedCity = JSON.parse(localStorage.getItem("savedCity"));
+    savedCity.push(newCity)
+    localStorage.setItem("savedCity", JSON.stringify(savedCity));
+    
 }
 
 var submitBtn = document.getElementById("submitBtn");
