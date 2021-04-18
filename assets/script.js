@@ -17,12 +17,14 @@ var kelvin= 273;
 var apiKey= "f23aca6d8b3d3632bf98bda960b7e9a6";
 var weather ={};
 weather.temperature = {
-    unit: "celsius"
 }
 
 function getCurrentWeather(){
     var cityEl = JSON.parse(localStorage.getItem("newCity"));
     var apiOpenWeather= `https://api.openweathermap.org/data/2.5/weather?q=${cityEl},us&appid=${apiKey}`
+    fetch(apiOpenWeather)
+     .then(response => response.json())
+     .then(data => console.log(data));
     fetch(apiOpenWeather).then(function(response){
         var data = response.json();
         return data;
@@ -33,52 +35,63 @@ function getCurrentWeather(){
         weather.description = data.weather[0].description;
         weather.iconId = data.weather[0].icon;
         weather.city = data.name;
+        weather.temperature.value = weather.temperature.value * 9/5 + 32; 
     })
     .then(function(){
         displayCurrentWeather();
     });
 }
 
-var futureDate = document.querySelector(".forcast-date p");
-var futureIcon = document.querySelector(".forcast-icon");
-var futureTemp = document.querySelector(".forcast-temp p");
-var futureDescript = document.querySelector(".forcast-description p");
 var future ={};
-future.temperature = {
-    unit: "celsius"
-}
+future.temperature = {};
 
+function renderForecast() {
 
-function displayFutureWeather(){
-    futureDate.innerHTML= `${future.date}`;
-    futureIcon.innerHTML= `<img src="./assets/icons/weather_icons/${future.iconId}.png">`;
-    futureTemp.innerHTML= `${future.temperature.value} degrees <span>F</span>`;
-    futureDescript.innerHTML= `${future.description}`;
-}
+    var forecastCard = document.createElement("div");
+    var futureDate = document.createElement("p");
+    var futureIcon = document.createElement("img");
+    var futureTemp = document.createElement("p");
+    var futureDescript = document.createElement("p");
+    forecastCard.classList.add("card","col-2");
+    
+    futureIcon.src = `./assets/icons/weather_icons/${future.iconId}.png`;
+
+    futureDate.textContent = `${future.date}`;
+    futureTemp.textContent =`${future.temperature.value} degrees F`; 
+    futureDescript = `${future.description}`;
+
+    forecastCard.append(futureDate);
+    forecastCard.append(futureIcon);
+    forecastCard.append(futureTemp);
+    forecastCard.append(futureDescript);
+
+    document.querySelector(".forcast-weather").append(forecastCard);
+  }
 
 function getFutureWeather(){
     var cityEl = JSON.parse(localStorage.getItem("newCity"));
     var futureAPI = `https://api.openweathermap.org/data/2.5/forecast?q=${cityEl}&appid=${apiKey}`
      fetch(futureAPI)
      .then(response => response.json())
-     .then(data => console.log(data));
+     .then(forecast => console.log(forecast));
 
     fetch(futureAPI).then(function(response){
-        var data = response.json();
-        return data;
+        var forecast = response.json();
+        return forecast;
     })
     .then(function(data) {
-        future.temperature.value = Math.floor(data.list[2].main.temp - kelvin);
-        future.description = data.list[2].weather[0].description;
-        future.iconId = data.list[2].weather[0].icon;
-        future.date = data.list[2].dt_txt;
-    })
-    .then(function(){
-        displayFutureWeather();
-    });
+        for (i=3; i < data.list.length;i = i+8) {
+         future.temperature.value = Math.floor(data.list[i].main.temp - kelvin);
+         future.description = data.list[i].weather[0].description;
+         future.iconId = data.list[i].weather[0].icon;
+         future.date = data.list[i].dt_txt;
+         future.temperature.value = future.temperature.value * 9/5 + 32;   
+         console.log(future);
+
+         renderForecast();  
+             
+        }});
 }
-
-
 
 
 function saveSearch(){
@@ -97,4 +110,6 @@ submitBtn.addEventListener('click', function(event) {
     saveSearch();
     getCurrentWeather();
     getFutureWeather();
+    
+        
 });
