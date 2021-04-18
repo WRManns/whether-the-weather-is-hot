@@ -1,4 +1,4 @@
-var alertEl = document.querySelector(".alert");
+
 var iconEl = document.querySelector(".weather-icon");
 var tempEl = document.querySelector(".temp-display p");
 var descriptEl = document.querySelector(".weather-description p");
@@ -107,9 +107,12 @@ function saveSearch(){
 var submitBtn = document.getElementById("submitBtn");
 submitBtn.addEventListener('click', function(event) {
     event.preventDefault();
+    document.querySelector(".current-weather").classList.remove("hidden");
     saveSearch();
     getCurrentWeather();
     getFutureWeather();
     
-        
+     
 });
+
+
