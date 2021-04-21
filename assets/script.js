@@ -108,7 +108,8 @@ function getFutureWeather(){
           }
           
           future.date= timeConverter(0);
-         renderForecast();  
+
+          renderForecast();  
              
         }});
 }
@@ -128,9 +129,35 @@ var submitBtn = document.getElementById("submitBtn");
 submitBtn.addEventListener('click', function(event) {
     event.preventDefault();
     document.querySelector(".current-weather").classList.remove("hidden");
+    
+    clearCurrent();
+    clearForcast();
     saveSearch();
     getCurrentWeather();
     getFutureWeather();
 });
+
+function clearCurrent() {
+    var current = document.querySelector(".weather-display")
+    removeAllChildNodes(current);
+}
+
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+      parent.removeChild(parent.firstChild);
+  }
+}
+
+function clearForcast() {
+    var forcast = document.querySelector(".forcast-weather")
+    removeAllChildNodes(forcast);
+}
+
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+      parent.removeChild(parent.firstChild);
+  }
+}
+
 
 
