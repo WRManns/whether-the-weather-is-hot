@@ -49,6 +49,7 @@ function getCurrentWeather(){
         weather.city = data.name;
         weather.humidity = data.main.humidity;
         weather.wind = data.wind.speed;
+        //converting temp value from kelvin to farhenheit
         weather.temperature.value = weather.temperature.value * 9/5 + 32; 
     })
     //now that data is gathered, we can create the card
