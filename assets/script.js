@@ -61,7 +61,7 @@ function renderForecast() {
     var futureIcon = document.createElement("img");
     var futureTemp = document.createElement("p");
     var futureDescript = document.createElement("p");
-    forecastCard.classList.add("card","col-2");
+    forecastCard.classList.add("card","col-6","col-md-2");
     
     futureIcon.src = `./assets/icons/weather_icons/${future.iconId}.png`;
 
