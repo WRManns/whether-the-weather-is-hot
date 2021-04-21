@@ -1,23 +1,32 @@
 
-var iconEl = document.querySelector(".weather-icon");
-var tempEl = document.querySelector(".temp-display p");
-var descriptEl = document.querySelector(".weather-description p");
-var locationEl = document.querySelector(".location p");
 var savedCity= [];
 
 
-function displayCurrentWeather(){
-iconEl.innerHTML= `<img src="./assets/icons/weather_icons/${weather.iconId}.png">`;
-tempEl.innerHTML= `${weather.temperature.value} degrees <span>F</span>`;
-descriptEl.innerHTML= `${weather.description}`;
-locationEl.innerHTML= `${weather.city}`;
+function renderCurrentWeather(){
+    var currentCard = document.createElement("div");
+    var currentCity = document.createElement("p");
+    var currentIcon = document.createElement("img");
+    var currentTemp = document.createElement("p");
+    var currentDescript = document.createElement("p");
+
+    currentIcon.src = `./assets/icons/weather_icons/${weather.iconId}.png`;
+
+    currentCity.textContent = `${weather.city}`;
+    currentTemp.textContent =`${weather.temperature.value} degrees F`; 
+    currentDescript = `${weather.description}`;
+
+    currentCard.append(currentCity);
+    currentCard.append(currentIcon);
+    currentCard.append(currentTemp);
+    currentCard.append(currentDescript);
+
+    document.querySelector(".weather-display").append(currentCard);
 }
     
 var kelvin= 273;
 var apiKey= "f23aca6d8b3d3632bf98bda960b7e9a6";
 var weather ={};
-weather.temperature = {
-}
+weather.temperature = {};
 
 function getCurrentWeather(){
     var cityEl = JSON.parse(localStorage.getItem("newCity"));
@@ -38,7 +47,7 @@ function getCurrentWeather(){
         weather.temperature.value = weather.temperature.value * 9/5 + 32; 
     })
     .then(function(){
-        displayCurrentWeather();
+        renderCurrentWeather();
     });
 }
 
@@ -85,9 +94,20 @@ function getFutureWeather(){
          future.description = data.list[i].weather[0].description;
          future.iconId = data.list[i].weather[0].icon;
          future.date = data.list[i].dt_txt;
-         future.temperature.value = future.temperature.value * 9/5 + 32;   
+         future.temperature.value = future.temperature.value * 9/5 + 32; 
          console.log(future);
-
+         
+         function timeConverter(dateFuture){
+            var dateFuture = data.list[i].dt_txt;
+            var a = new Date(dateFuture);
+            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            var month = months[a.getMonth()];
+            var date = a.getDate();
+            var time = date + ' ' + month;
+            return time;
+          }
+          
+          future.date= timeConverter(0);
          renderForecast();  
              
         }});
@@ -111,8 +131,6 @@ submitBtn.addEventListener('click', function(event) {
     saveSearch();
     getCurrentWeather();
     getFutureWeather();
-    
-     
 });
 
 
