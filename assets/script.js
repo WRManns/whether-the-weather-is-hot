@@ -135,9 +135,7 @@ function saveSearch(){
     var newCity = document.getElementById("inputCity");
     
     localStorage.setItem("newCity", JSON.stringify(newCity.value));
-    var savedCity = JSON.parse(localStorage.getItem("savedCity"));
-    savedCity.push(newCity)
-    localStorage.setItem("savedCity", JSON.stringify(savedCity));
+   
     
 
 };
